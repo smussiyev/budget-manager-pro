@@ -1,0 +1,28 @@
+services:
+  api-service:
+    build:
+      context: ./api-service
+    container_name: budget-api
+    working_dir: /var/www
+    ports:
+      - "9000:9000"
+    depends_on:
+      - database
+    volumes:
+      - ./api-service:/var/www
+
+  database:
+    image: postgres:16
+    container_name: budget_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: budget_db
+      POSTGRES_USER: budget_user
+      POSTGRES_PASSWORD: budget_password
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
